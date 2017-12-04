@@ -2,14 +2,14 @@
 
 Following the steps to create the demo
 
-1. Install NPM -follow instructions for your OS from https://nodejs.org/en/
+##1. Install NPM -follow instructions for your OS from https://nodejs.org/en/
 
 2. Create package.json
 
 npm init
 
-# Use as main file. server.js
-# Use following git repo: https://github.com/luisw19/node
+Use as main file. server.js
+Use following git repo: https://github.com/luisw19/node
 
 3. Install Express as backend server
 
