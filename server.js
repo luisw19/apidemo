@@ -32,4 +32,4 @@ router.get("/orders",function(req,res){
 app.use('/',router);
 
 app.listen(3001);
-console.log("Listening to PORT 3000");
+console.log("Listening to PORT 3001");

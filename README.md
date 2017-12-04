@@ -130,8 +130,10 @@ router.get("/orders",function(req,res){
 
 Make sure you have Node and NPM installed.
 $ npm install -g dredd
+
 Initialize Dredd. Mind the privacy of API key.
 $ dredd init -r apiary -j apiaryApiKey:5259748f13b1f60890ed5666c135b0d7 -j apiaryApiName:orders78
+
 Run the test, reports appear here.
 $ dredd
 
@@ -158,7 +160,7 @@ RUN npm install
 ## Bundle app source
 COPY . /usr/src/app
 
-EXPOSE 8080
+EXPOSE 3001
 CMD [ "npm", "start" ]
 
 3. Build the container
@@ -172,9 +174,18 @@ docker build -t luisw19/ordersdemo .
 4. Push the docker image to docker hub
 
 docker login --username=<username>
+
 docker push <image name>
 
 5. Run the container from any docker-enabled machine with the command:
+
+docker run <docker container image name>
+
+docker run -d -p 3001:3001 luisw19/ordersdemo
+
+and to stop, get docker container id by running "docker ps" and then
+
+docker stop <container ID>
 
 # Update the Service Endpoint in the Orders API Demo in the API Platform Management Console
 
