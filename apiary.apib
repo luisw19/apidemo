@@ -1,28 +1,220 @@
 FORMAT: 1A
-HOST: http://polls.apiblueprint.org/
+HOST: https://api.mra.com/
 
-# Orders Demo
+# MRA Media Catalogue API
+The Music Catalogue API is provides access to MRA's
+digital media assets such as artits, albums and songs.
 
-Orders API.
+# Group Artists Media
+Artists related digital media resources.
 
-## Orders Collection [/orders]
+## Artists Resources [/v1/catalogue/artists]
+    
+### Find Artists [GET /v1/catalogue/artists{?limit,name,country,genre}]
+Returns all MRA artists that match the specified criteria.
++ Parameters
+    + limit (number, optional)
 
-### Get Orders [GET]
+        A limit on the number of artists to be returned. Limit can range
+        between 1 and 100 items.
+
+        + Default: `10`
+        
+    + name (string, optional)
+
+        A string to be used to search for a specific artist
+        
+    + country (string, optional)
+
+        The country code an artists belongs to. Note that MRA uses ISO 3166-1 alpha-2 for country codes 
+        
+        + Default: `GB`
+        
+    + genre (string, optional)
+
+        A string to be used to search for a specific artist
+
++ Request (application/json)
+
+    + Headers
+
+            api-key: 9d444d8c-1f30-492f-9d1f-c801089c2e65
 
 + Response 200 (application/json)
+    + Attributes
+        + metadata (Search Metadata)
+        + artists (array[Artist])
 
-     [
-          {
-              "orderId": "order 1",
-              "total_price": 50,
-              "line_items": [
-                  {
-                      "lineItem": 1,
-                      "productName": "Billy Bookshelf",
-                      "quantity": 1,
-                      "price": 50,
-                      "currency": "EUR"
-                  }
-              ]
-          }
-      ]
+### Get Artist [GET /v1/catalogue/artists/{artist_id}]
+Returns the details for a specific Artist such as bio and Albums
+
++ Parameters
+    + artist_id: art123456 (number, required)
+
+        The unique ID for a specific artist
+        
++ Request (application/json)
+
+    + Headers
+
+            api-key: 9d444d8c-1f30-492f-9d1f-c801089c2e65
+
++ Response 200 (application/json)
+    + Attributes (Artist)
+
+### Get Artist Albums [GET /v1/catalogue/artists/{artist_id}/albums]
+Returns all the Albums for the specified Artist. 
+
++ Parameters
+    + artist_id: art123456 (number, required)
+
+        The unique ID for a specific artist
+
++ Request (application/json)
+
+    + Headers
+
+            api-key: 9d444d8c-1f30-492f-9d1f-c801089c2e65
+
++ Response 200 (application/json)
+    + Attributes
+        + metadata (Search Metadata)
+        + albums (array[Album])
+
+# Group Album Media
+Artists-related digital media resources.
+
+## Album Resources [/v1/catalogue/albums]
+        
+### Get Album [GET /v1/catalogue/albums/{album_id}]
+Returns the details of a specific Album such as release date and Songs
+
++ Parameters
+    + album_id: alb000456 (number, required)
+
+        The unique ID for the album
+
++ Request (application/json)
+
+    + Headers
+
+            api-key: 9d444d8c-1f30-492f-9d1f-c801089c2e65
+
++ Response 200 (application/json)
+    + Attributes(Album)
+
+# Group Songs Media
+Songs and Video digital media resources.
+
+## Songs Resources [/v1/catalogue/songs]
+
+### Find Songs [GET /v1/catalogue/songs{?limit,name,artist,genre}]
+Returns all Songs that match the specified criteria.
++ Parameters
+    + limit (number, optional)
+
+        A limit on the number of artists to be returned. Limit can range
+        between 1 and 100 items.
+
+        + Default: `10`
+        
+    + name (string, optional)
+
+        A string to be used to search for a specific artist
+        
+    + artist (string, optional)
+
+        The name of the artist 
+        
+    + genre (string, optional)
+
+        A string to be used to search for a specific artist
+
++ Request (application/json)
+
+    + Headers
+
+            api-key: 9d444d8c-1f30-492f-9d1f-c801089c2e65
+
++ Response 200 (application/json)
+    + Attributes
+        + metadata (Search Metadata)
+        + songs (array[Song])
+
+### Get Song  [GET /v1/catalogue/songs/{song_id}]
+Returns the details for a specific Song, such as length and streaming endpoints
+
++ Parameters
+    + song_id: son003456 (number, required)
+
+        The unique ID for a specific song
+
++ Request (application/json)
+
+    + Headers
+
+            api-key: 9d444d8c-1f30-492f-9d1f-c801089c2e65
+
++ Response 200 (application/json)
+    + Attributes (Song)
+
+# Data Structures
+
+## Search Metadata (object)
+- total_count: 1 (number, required)
+- result_count: 1 (number, required)
+- offset: 1 (number, required)
+
+## Artist (object)
+- artist_name: Oasis (string, required)
+- artist_id: art123456 (string, required)
+- country: UK (string, optional)
+- bio: Oasis is a great band from Manchester (string, optional)
+- albums(array[Album], optional)
+- _links (optional)
+    - self
+        - href: /v1/catalogue/artists/art12345 (string, required)
+    - albums
+        - href: /v1/catalogue/artists/art12345/albums (string, optional)
+    - genres
+        - href: /v1/catalogue/artists/art12345/genres (string, optional)
+
+## Album (object)
+- album_name: `(What's the Story) Morning Glory?` (string, required)
+- album_id: alb000456 (string, required)
+- upc: 074646735121 (string, optional)
+
+    Universal Product Code 
+
+- release_date: 1995-10-02 (string, required)
+- song_count: 12 (number, required)
+- length_seconds: 3006 (number, optional)
+- artist(Artist, optional)
+- songs(array[Song], optional)
+- _links (optional)
+    - self
+        - href: /v1/catalogue/albums/alb000456 (string, required)
+
+## Song (object)
+- song_name: Wonder wall (string, required)
+- song_id: son003456 (string, required)
+- isrc: GBAAW9500189 (string, optional)
+
+    International Standard Recording Code
+
+- release_date: 1995-10-02 (string, optional)
+- artist(Artist, optional)
+- album(Album, optional)
+- _links (optional)
+    - self
+        - href: /v1/catalogue/songs/son003456 (string, required)
+    - audio
+        - format: mp3 (string, optional)
+        - lenght_seconds: 259 (number, optional)
+        - href: /v1/catalogue/songs/son003456/audio?format=mp3 (string, optional)
+    - video
+        - format: mp4 (string, optional)
+        - lenght_seconds: 279 (number, optional)
+        - href: /v1/catalogue/songs/son003456/audio?format=mp4 (string, optional)
+    - lyrics
+        - href: /v1/catalogue/songs/son003456/lyrics (string, optional)
