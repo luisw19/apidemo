@@ -2,7 +2,7 @@
 
 Following the steps to create the demo
 
-##1. Install NPM -follow instructions for your OS from https://nodejs.org/en/
+1. Install NPM -follow instructions for your OS from https://nodejs.org/en/
 
 2. Create package.json
 
