@@ -8,7 +8,7 @@ Following the steps to create the simple Orders demo
 
 2. Create a new API named Sample Orders (upper menu "Create New API")
 
-3. Add the following markdown test
+3. Add the following markdown text:
 
 FORMAT: 1A
 HOST: http://oc-144-21-66-168.compute.oraclecloud.com:3000/ordersdemo
@@ -49,7 +49,8 @@ Simple get orders collection
     b. Add values as following: "Name": Orders Demo , "version": 1.0, "Description": Sample orders API
     c. Edit "API Request", add "v1/ordersdemo" as the "API Endpoint URL"
     e. Edit "Service Request", click "Enter a URL" then enter the Apiary Orders Demo mock URL
-    f. Click on the "Deploy" icon (second top-down on the left), then click ""
+    f. Click on the "Deployments" icon (second top-down on the left), then click "Deploy API", select a gateway and then Deploy
+    g. Try the URL from your browser or an API tester
 
 # Create Sample Orders Microservice
 
@@ -120,3 +121,69 @@ router.get("/orders",function(req,res){
         }]
       );
 });
+
+# Unit Test the API endpoint against the API definition using Dredd (open source tool by Apiary)
+
+1. Go back to Apiary, open the Orders Demo and click on Tests > Tutorial
+
+2. Execute the npm commands as exactly as indicated
+
+Make sure you have Node and NPM installed.
+$ npm install -g dredd
+Initialize Dredd. Mind the privacy of API key.
+$ dredd init -r apiary -j apiaryApiKey:5259748f13b1f60890ed5666c135b0d7 -j apiaryApiName:orders78
+Run the test, reports appear here.
+$ dredd
+
+3. If no errors then all good to create container and push to Docker hub and then Deploy
+
+# Package and Deploy
+
+1. Create a docker file inside the node application directory
+
+touch Dockerfile
+
+2. Edit the file as following:
+
+FROM node:argon
+
+# Create app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+# Install app dependencies
+COPY package.json /usr/src/app/
+RUN npm install
+
+# Bundle app source
+COPY . /usr/src/app
+
+EXPOSE 8080
+CMD [ "npm", "start" ]
+
+3. Build the container
+
+docker build -t <docker hub user>/<container namme> .
+
+i.e.
+
+docker build -t luisw19/ordersdemo .
+
+4. Push the docker image to docker hub
+
+docker login --username=<username>
+docker push <image name>
+
+5. Run the container from any docker-enabled machine with the command:
+
+# Update the Service Endpoint in the Orders API Demo in the API Platform Management Console
+
+1. Register the service in the platform by running the command from the same server that's running the Node App
+
+curl -i -k -H "Content-Type: application/json" -H "Authorization: Basic d2VibG9naWM6SUszQVcxbjU=" -X POST https://oc-144-21-66-168.compute.oraclecloud.com:7202/apiplatform/management/v1/services -d '{ "name": "Orders Demo Service", "description": "Order service self-registration", "version": "1.0", "implementation": { "executions": { "request": [ "1" ], "response": [ "2" ] }, "policies": [ { "id": "1", "type": "o:BackendRequest", "version": "1.0", "config": { "endpoints": [ { "name" : "endpoint 1", "useProxy": false, "url": "http://oc-144-21-66-168.compute.oraclecloud.com:3001/ordersdemo" } ] } }, { "id": "2", "type": "o:BackendResponse", "version": "1.0", "config": {} } ] } }'
+
+2. Open Orders API, Edit "Service Request", click "Select Service" then select "Orders Demo Service"
+
+3. Re-deploy
+
+4. Re-run Dredd
