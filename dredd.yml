@@ -33,4 +33,4 @@ hooks-worker-handler-host: 127.0.0.1
 hooks-worker-handler-port: 61321
 config: ./dredd.yml
 blueprint: apiary.apib
-endpoint: 'http://oc-144-21-66-168.compute.oraclecloud.com:8001/v1'
+endpoint: 'localhost:3001'

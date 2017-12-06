@@ -11,33 +11,39 @@ Following the steps to create the simple Orders demo
 3. Add the following markdown text:
 
 FORMAT: 1A
-HOST: http://oc-144-21-66-168.compute.oraclecloud.com:3000/ordersdemo
+HOST: http://oc-144-21-66-168.compute.oraclecloud.com:8001/v1
 
-# Orders
+# Orders Demo
 
-Simple get orders collection
+Simple get orders collection demo
 
 ## Orders Collection [/orders]
 
 ### Get Orders [GET]
 
-+ Response 200 (application/json)
++ Response 200
 
-        [
-            {
-                "orderId": "order 1",
-                "total_price": 50,
-                "line_items": [
-                    {
-                        "lineItem": 1,
-                        "productName": "Billy Bookshelf",
-                        "quantity": 1,
-                        "price": 50,
-                        "currency": "EUR"
-                    }
-                ]
-            }
-        ]
+    + Headers
+
+            content-type: application/json; charset=utf-8
+
+    + Body
+
+            [
+                {
+                    "orderId": "order 1",
+                    "total_price": 50,
+                    "line_items": [
+                        {
+                            "lineItem": 1,
+                            "productName": "Billy Bookshelf",
+                            "quantity": 1,
+                            "price": 50,
+                            "currency": "EUR"
+                        }
+                    ]
+                }
+            ]
 
 4. Test the API mock by clicking on the "Get Orders" resource on the right-hand side on the screen, then click on Try > Call resource. Also take note of the URL used (which is the Mock URL, i.e. https://private-b3bf03-orders78.apiary-mock.com/orders)
 
@@ -108,18 +114,22 @@ npm start
 //orders resource
 router.get("/orders",function(req,res){
     res.json(
-        [{
+      [
+        {
           "orderId": "order 1",
           "total_price": 50,
-          "line_items": [{
-            "lineItem": 1,
-            "productName": "Billy Bookshelf",
-            "quantity": 1,
-            "price": 50,
-            "currency": "EUR"
-          }]
-        }]
-      );
+          "line_items": [
+            {
+              "lineItem": 1,
+              "productName": "Billy Bookshelf",
+              "quantity": 1,
+              "price": 50,
+              "currency": "EUR"
+            }
+          ]
+        }
+      ]
+    );
 });
 
 # Unit Test the API endpoint against the API definition using Dredd (open source tool by Apiary)

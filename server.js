@@ -14,18 +14,22 @@ router.get("/",function(req,res){
 //orders resource
 router.get("/orders",function(req,res){
     res.json(
-        [{
+      [
+        {
           "orderId": "order 1",
           "total_price": 50,
-          "line_items": [{
-            "lineItem": 1,
-            "productName": "Billy Bookshelf",
-            "quantity": 1,
-            "price": 50,
-            "currency": "EUR"
-          }]
-        }]
-      );
+          "line_items": [
+            {
+              "lineItem": 1,
+              "productName": "Billy Bookshelf",
+              "quantity": 1,
+              "price": 50,
+              "currency": "EUR"
+            }
+          ]
+        }
+      ]
+    );
 });
 
 //use router
